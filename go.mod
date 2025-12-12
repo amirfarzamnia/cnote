@@ -1,4 +1,4 @@
-module tnote
+module cnote
 
 go 1.25.5
 

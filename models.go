@@ -4,32 +4,37 @@ import (
 	"time"
 )
 
-// Note defines the structure of a note
+// Note represents a single casual note entry.
 type Note struct {
-	ID        int       `json:"id"`
-	Text      string    `json:"text"`
-	Pinned    bool      `json:"pinned"`
-	CreatedAt time.Time `json:"created_at"`
+	ID        int       `json:"id"`         // Incremental ID
+	Text      string    `json:"text"`       // The content of the note
+	Pinned    bool      `json:"pinned"`     // Visual priority status
+	CreatedAt time.Time `json:"created_at"` // Timestamp of creation
 }
 
-// RPC Args/Reply structures
+// AddArgs represents arguments for adding a note.
 type AddArgs struct {
 	Text string
 }
 
+// IDArgs represents arguments for commands targeting a specific note.
+// IDStr can be a number ("1"), "first", or "last".
 type IDArgs struct {
-	IDStr string // Can be "1", "2", "first", "last"
+	IDStr string
 }
 
+// EmptyArgs is used for commands that require no input (like List or Clear).
 type EmptyArgs struct{}
 
+// NoteReply is the standard response for single-note operations.
 type NoteReply struct {
-	Note    *Note
-	Message string
-	Error   string
+	Note    *Note  // The note object (if applicable)
+	Message string // Human-readable success message
+	Error   string // Error message (if any)
 }
 
+// ListReply is the response for the List command.
 type ListReply struct {
-	Notes []Note
+	Notes []Note // Slice of all active notes
 	Error string
 }

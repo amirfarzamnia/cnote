@@ -10,9 +10,14 @@ import (
 )
 
 func main() {
-	var rootCmd = &cobra.Command{Use: "tnote"}
+	var rootCmd = &cobra.Command{
+		Use:   "cnote",
+		Short: "cnote 🎩: A casual, ephemeral note-taking tool",
+		Long:  `cnote is an in-memory note tool. Notes persist only while the list is not empty.`,
+	}
 
-	// --- Internal Command: Daemon (Hidden) ---
+	// --- HIDDEN DAEMON COMMAND ---
+	// This is not meant to be run by humans. It is spawned by the client.
 	var daemonCmd = &cobra.Command{
 		Use:    "daemon",
 		Hidden: true,
@@ -23,13 +28,20 @@ func main() {
 
 	// --- ADD ---
 	var addCmd = &cobra.Command{
-		Use:   "add [note]",
-		Short: "Add a note to memory",
+		Use:   "add [note text]",
+		Short: "Add a note (Starts session if empty)",
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			text := args[0]
-			// True = Auto-start daemon if missing
-			client, err := getClient(true)
+			// Join args so "cnote add my note" works without quotes
+			text := ""
+			for i, arg := range args {
+				if i > 0 {
+					text += " "
+				}
+				text += arg
+			}
+
+			client, err := getClient(true) // true = auto-start daemon
 			if err != nil {
 				fmt.Println("Error:", err)
 				return
@@ -51,9 +63,9 @@ func main() {
 		Use:   "list",
 		Short: "List all notes",
 		Run: func(cmd *cobra.Command, args []string) {
-			client, err := getClient(false)
+			client, err := getClient(false) // false = do not start daemon if missing
 			if err != nil {
-				fmt.Println("No active notes in memory.")
+				fmt.Println("📭 No active casual session.")
 				return
 			}
 			defer client.Close()
@@ -66,20 +78,20 @@ func main() {
 			}
 
 			if len(reply.Notes) == 0 {
-				fmt.Println("No notes found.")
+				fmt.Println("📭 No notes found.")
 				return
 			}
 
-			// Pretty print with TabWriter
+			// Tabwriter for clean columns
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "ID\tP\tCREATED\tNOTE")
+			fmt.Fprintln(w, "ID\t \tTIME\tNOTE")
+			fmt.Fprintln(w, "--\t-\t----\t----")
 			for _, n := range reply.Notes {
 				pinMarker := ""
 				if n.Pinned {
-					pinMarker = "*"
+					pinMarker = "📌"
 				}
-				// Format date human-readable
-				dateStr := n.CreatedAt.Format("15:04:05")
+				dateStr := n.CreatedAt.Format("15:04")
 				fmt.Fprintf(w, "%d\t%s\t%s\t%s\n", n.ID, pinMarker, dateStr, n.Text)
 			}
 			w.Flush()
@@ -89,7 +101,7 @@ func main() {
 	// --- REMOVE ---
 	var removeCmd = &cobra.Command{
 		Use:   "remove [id]",
-		Short: "Remove a note (supports 'first', 'last')",
+		Short: "Remove a note ('first', 'last', or ID)",
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			client, err := getClient(false)
@@ -102,7 +114,7 @@ func main() {
 			var reply NoteReply
 			err = client.Call("NoteService.Remove", IDArgs{IDStr: args[0]}, &reply)
 			if err != nil {
-				fmt.Println("Error:", err)
+				fmt.Println("Error:", err) // Likely "ID not found"
 				return
 			}
 			fmt.Println(reply.Message)
@@ -112,7 +124,7 @@ func main() {
 	// --- CLEAR ---
 	var clearCmd = &cobra.Command{
 		Use:   "clear",
-		Short: "Remove all notes and stop session",
+		Short: "Clear all notes and stop session",
 		Run: func(cmd *cobra.Command, args []string) {
 			client, err := getClient(false)
 			if err != nil {
@@ -127,71 +139,45 @@ func main() {
 		},
 	}
 
-	// --- PIN ---
-	var pinCmd = &cobra.Command{
-		Use:   "pin [id]",
-		Short: "Pin a note",
-		Args:  cobra.ExactArgs(1),
-		Run: func(cmd *cobra.Command, args []string) {
-			client, err := getClient(false)
-			if err != nil {
-				fmt.Println("No active session.")
-				return
-			}
-			defer client.Close()
-			var reply NoteReply
-			if err := client.Call("NoteService.Pin", IDArgs{IDStr: args[0]}, &reply); err != nil {
-				fmt.Println("Error:", err)
-				return
-			}
-			fmt.Println(reply.Message)
-		},
-	}
+	// --- PIN/UNPIN/SHOW Wrappers ---
+	// Helper to reduce code duplication for simple ID commands
+	runIDCommand := func(method string, id string) {
+		client, err := getClient(false)
+		if err != nil {
+			fmt.Println("No active session.")
+			return
+		}
+		defer client.Close()
+		var reply NoteReply
+		if err := client.Call(method, IDArgs{IDStr: id}, &reply); err != nil {
+			fmt.Println("Error:", err)
+			return
+		}
 
-	// --- UNPIN ---
-	var unpinCmd = &cobra.Command{
-		Use:   "unpin [id]",
-		Short: "Unpin a note",
-		Args:  cobra.ExactArgs(1),
-		Run: func(cmd *cobra.Command, args []string) {
-			client, err := getClient(false)
-			if err != nil {
-				fmt.Println("No active session.")
-				return
-			}
-			defer client.Close()
-			var reply NoteReply
-			if err := client.Call("NoteService.Unpin", IDArgs{IDStr: args[0]}, &reply); err != nil {
-				fmt.Println("Error:", err)
-				return
-			}
-			fmt.Println(reply.Message)
-		},
-	}
-
-	// --- SHOW ---
-	var showCmd = &cobra.Command{
-		Use:   "show [id]",
-		Short: "Show details of a specific note",
-		Args:  cobra.ExactArgs(1),
-		Run: func(cmd *cobra.Command, args []string) {
-			client, err := getClient(false)
-			if err != nil {
-				fmt.Println("No active session.")
-				return
-			}
-			defer client.Close()
-			var reply NoteReply
-			if err := client.Call("NoteService.Show", IDArgs{IDStr: args[0]}, &reply); err != nil {
-				fmt.Println("Error:", err)
-				return
-			}
+		if method == "NoteService.Show" {
 			n := reply.Note
-			fmt.Printf("ID:      %d\n", n.ID)
+			fmt.Printf("--- Note %d ---\n", n.ID)
 			fmt.Printf("Pinned:  %v\n", n.Pinned)
-			fmt.Printf("Created: %s\n", n.CreatedAt.Format(time.RFC1123))
-			fmt.Printf("Text:    %s\n", n.Text)
-		},
+			fmt.Printf("Created: %s\n", n.CreatedAt.Format(time.Kitchen))
+			fmt.Printf("Content: %s\n", n.Text)
+		} else {
+			fmt.Println(reply.Message)
+		}
+	}
+
+	var pinCmd = &cobra.Command{
+		Use: "pin [id]", Short: "Pin a note", Args: cobra.ExactArgs(1),
+		Run: func(c *cobra.Command, a []string) { runIDCommand("NoteService.Pin", a[0]) },
+	}
+
+	var unpinCmd = &cobra.Command{
+		Use: "unpin [id]", Short: "Unpin a note", Args: cobra.ExactArgs(1),
+		Run: func(c *cobra.Command, a []string) { runIDCommand("NoteService.Unpin", a[0]) },
+	}
+
+	var showCmd = &cobra.Command{
+		Use: "show [id]", Short: "Show full details", Args: cobra.ExactArgs(1),
+		Run: func(c *cobra.Command, a []string) { runIDCommand("NoteService.Show", a[0]) },
 	}
 
 	rootCmd.AddCommand(daemonCmd, addCmd, listCmd, removeCmd, clearCmd, pinCmd, unpinCmd, showCmd)
