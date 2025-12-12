@@ -10,9 +10,43 @@ It is designed for the "scratchpad" workflow: you need to remember something _ri
 
 ## 🚀 Installation
 
+You have two options for installing **cnote**:
+
+### Option 1: Using Pre-built Binaries (Recommended)
+
+The easiest way is to download a binary from our [GitHub Releases page](https://github.com/amirfarzamnia/cnote/releases).
+
+1.  **Download:** Find the latest release and download the file appropriate for your system:
+    - **Linux:** `cnote_[version]_linux_amd64.tar.gz`
+    - **macOS (Intel/M1/M2):** `cnote_[version]_darwin_amd64.tar.gz`
+
+2.  **Extract:** Unpack the archive to get the `cnote` executable.
+
+    ```bash
+    tar -xzf cnote_[version]_linux_amd64.tar.gz
+    ```
+
+3.  **Install:** Move the binary to a directory in your system's PATH (e.g., `/usr/local/bin`).
+
+    ```bash
+    sudo mv cnote /usr/local/bin/
+    ```
+
+4.  **Verify:**
+    ```bash
+    cnote --version
+    ```
+
+### Option 2: Build from Source (Requires Go)
+
+If you have Go installed and prefer to build it yourself:
+
 ```bash
-git clone [https://github.com/yourusername/cnote.git](https://github.com/yourusername/cnote.git)
+# Clone the repository
+git clone https://github.com/amirfarzamnia/cnote.git
 cd cnote
+
+# Build and install the binary
 go build -o cnote .
 sudo mv cnote /usr/local/bin/
 ```
