@@ -20,7 +20,7 @@ func getClient(autoStart bool) (*rpc.Client, error) {
 
 	// 2. If connection failed and we shouldn't auto-start (e.g., 'list' command), fail.
 	if !autoStart {
-		return nil, fmt.Errorf("no active casual session. Start one with 'cnote add <text>'")
+		return nil, fmt.Errorf("No active session. Start one with 'cnote add <text>'")
 	}
 
 	// 3. Spawn the Daemon
@@ -37,7 +37,7 @@ func getClient(autoStart bool) (*rpc.Client, error) {
 	}
 
 	// 4. Wait loop: Wait for the socket file to appear (max 1 second)
-	for i := 0; i < 20; i++ {
+	for range 20 {
 		time.Sleep(50 * time.Millisecond)
 		client, err = rpc.Dial("unix", SocketPath)
 		if err == nil {

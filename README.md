@@ -64,7 +64,7 @@ cnote add "Deploy to production at 4pm"
 **2. Add more**
 
 ```bash
-cnote add Buy milk
+cnote add "Buy milk"
 cnote add "Check server logs"
 ```
 
