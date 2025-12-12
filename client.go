@@ -37,7 +37,7 @@ func getClient(autoStart bool) (*rpc.Client, error) {
 	}
 
 	// 4. Wait loop: Wait for the socket file to appear (max 1 second)
-	for range 20 {
+	for i := 0; i < 20; i++ {
 		time.Sleep(50 * time.Millisecond)
 		client, err = rpc.Dial("unix", SocketPath)
 		if err == nil {
