@@ -67,7 +67,9 @@ Add some more notes.
 
 ```bash
 cnote add "Buy milk"
+# Note added (ID: 2)
 cnote add "Check server logs" --pin
+# Note added (Pinned) (ID: 3)
 ```
 
 **3. View notes:**
@@ -75,11 +77,11 @@ List added notes.
 
 ```bash
 cnote list
-# ID      TIME NOTE
-# --    - ---- ----
-# 1      15:30 Deploy to production at 4pm
-# 2      15:31 Buy milk
-# 3      15:32 Check server logs
+# ID  PINNED  CREATED  CONTENT
+# --  ------  -------  -------
+# 3   Yes     11:35PM  Check server logs
+# 1           11:35PM  Deploy to production at 4pm
+# 2           11:35PM  Buy milk
 ```
 
 **4. Pin important stuff:**
@@ -103,7 +105,7 @@ When you clear the list, `cnote` shuts down completely.
 
 ```bash
 cnote clear
-# All notes cleared. Session ended.
+# All notes cleared.
 ```
 
 ## 🧠 Under the Hood (Architecture)
