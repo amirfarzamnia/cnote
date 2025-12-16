@@ -94,8 +94,8 @@ func main() {
 
 			// Tabwriter for clean columns
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "ID\tPIN\tTIME\tNOTE")
-			fmt.Fprintln(w, "--\t---\t-------\t----")
+			fmt.Fprintln(w, "ID\tPINNED\tCREATED\tCONTENT")
+			fmt.Fprintln(w, "--\t------\t-------\t-------")
 			for _, n := range reply.Notes {
 				pinMarker := ""
 				if n.Pinned {
