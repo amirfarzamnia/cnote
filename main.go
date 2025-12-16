@@ -145,7 +145,11 @@ func main() {
 			defer client.Close()
 
 			var reply NoteReply
-			client.Call("NoteService.Clear", EmptyArgs{}, &reply)
+			err = client.Call("NoteService.Clear", EmptyArgs{}, &reply)
+			if err != nil {
+				fmt.Println("Error:", err)
+				return
+			}
 			fmt.Println(reply.Message)
 		},
 	}
