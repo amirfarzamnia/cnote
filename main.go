@@ -68,7 +68,7 @@ func main() {
 		Run: func(cmd *cobra.Command, args []string) {
 			client, err := getClient(false) // false = do not start daemon if missing
 			if err != nil {
-				fmt.Println("📭 No active session.")
+				fmt.Println("No active session.")
 				return
 			}
 			defer client.Close()
@@ -81,7 +81,7 @@ func main() {
 			}
 
 			if len(reply.Notes) == 0 {
-				fmt.Println("📭 No notes found.")
+				fmt.Println("No notes found.")
 				return
 			}
 
@@ -109,7 +109,7 @@ func main() {
 		Run: func(cmd *cobra.Command, args []string) {
 			client, err := getClient(false)
 			if err != nil {
-				fmt.Println("📭 No active session.")
+				fmt.Println("No active session.")
 				return
 			}
 			defer client.Close()
@@ -131,7 +131,7 @@ func main() {
 		Run: func(cmd *cobra.Command, args []string) {
 			client, err := getClient(false)
 			if err != nil {
-				fmt.Println("📭 No active session.")
+				fmt.Println("No active session.")
 				return
 			}
 			defer client.Close()
@@ -147,7 +147,7 @@ func main() {
 	runIDCommand := func(method string, id string) {
 		client, err := getClient(false)
 		if err != nil {
-			fmt.Println("📭 No active session.")
+			fmt.Println("No active session.")
 			return
 		}
 		defer client.Close()
