@@ -170,7 +170,7 @@ func (s *NoteService) Clear(args EmptyArgs, reply *NoteReply) error {
 	defer s.mu.Unlock()
 
 	s.notes = []*Note{}
-	reply.Message = "All notes cleared. Session ended."
+	reply.Message = "All notes cleared."
 	s.checkAutoShutdown()
 	return nil
 }
