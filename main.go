@@ -9,11 +9,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var version = "dev" // GoReleaser will overwrite "dev" with the tag
+
 func main() {
 	var rootCmd = &cobra.Command{
-		Use:   "cnote",
-		Short: "cnote 🎩: A casual, ephemeral note-taking tool",
-		Long:  `cnote is an in-memory note tool. Notes persist only while the list is not empty.`,
+		Use:     "cnote",
+		Short:   "cnote 🎩: A casual, ephemeral note-taking tool",
+		Long:    `cnote is an in-memory note tool. Notes persist only while the list is not empty.`,
+		Version: version,
 	}
 
 	// --- HIDDEN DAEMON COMMAND ---

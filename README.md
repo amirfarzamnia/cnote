@@ -32,9 +32,9 @@ The easiest way is to download a binary from our [GitHub Releases page](https://
     sudo mv cnote /usr/local/bin/
     ```
 
-4.  **Start:** Start by creating a note.
+4.  **Verify:** Check the version to ensure it's installed correctly.
     ```bash
-    cnote add "My awesome note"
+    cnote --version
     ```
 
 ### Option 2: Build from Source (Requires Go)
