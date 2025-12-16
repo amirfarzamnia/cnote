@@ -186,11 +186,15 @@ func main() {
 		Run: func(c *cobra.Command, a []string) { runIDCommand("NoteService.Show", a[0]) },
 	}
 
+	// Register flag before Execute
+	addCmd.Flags().BoolP("pin", "p", false, "Pin the note immediately")
+
+	// Add all commands to rootCmd
 	rootCmd.AddCommand(daemonCmd, addCmd, listCmd, removeCmd, clearCmd, pinCmd, unpinCmd, showCmd)
+
+	// Execute the root command
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-
-	addCmd.Flags().BoolP("pin", "p", false, "Pin the note immediately")
 }
