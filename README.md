@@ -58,14 +58,14 @@ Just add a note. If `cnote` isn't running, it starts itself.
 
 ```bash
 cnote add "Deploy to production at 4pm"
-# 🎩 Note added (ID: 1)
+# Note added (ID: 1)
 ```
 
 **2. Add more**
 
 ```bash
-cnote add Buy milk
-cnote add "Check server logs"
+cnote add "Buy milk"
+cnote add "Check server logs" --pin
 ```
 
 **3. View notes**
@@ -83,7 +83,7 @@ cnote list
 
 ```bash
 cnote pin 1
-# 📌 Pinned note 1
+# Pinned note 1
 ```
 
 **5. Smart Removal**
@@ -91,7 +91,7 @@ You can use IDs, or keywords `first` and `last`.
 
 ```bash
 cnote remove last
-# 🗑️ Removed note 3
+# Removed note 3
 ```
 
 **6. The "Done" Button**
@@ -99,7 +99,7 @@ When you clear the list, `cnote` shuts down completely.
 
 ```bash
 cnote clear
-# ✨ All notes cleared. Session ended.
+# All notes cleared. Session ended.
 ```
 
 ## 🧠 Under the Hood (Architecture)

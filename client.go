@@ -20,7 +20,7 @@ func getClient(autoStart bool) (*rpc.Client, error) {
 
 	// 2. If connection failed and we shouldn't auto-start (e.g., 'list' command), fail.
 	if !autoStart {
-		return nil, fmt.Errorf("no active session. Start one with 'cnote add <text>'")
+		return nil, fmt.Errorf("no active session. Start one with 'cnote add'")
 	}
 
 	// 3. Spawn the Daemon

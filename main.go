@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
 	"text/tabwriter"
 	"time"
 
@@ -34,10 +33,8 @@ func main() {
 	var addCmd = &cobra.Command{
 		Use:   "add [note text]",
 		Short: "Add a note (Starts session if empty)",
-		Args:  cobra.MinimumNArgs(1),
+		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			text := strings.Join(args, " ")
-
 			client, err := getClient(true)
 			if err != nil {
 				fmt.Println("Error:", err)
@@ -53,7 +50,7 @@ func main() {
 
 			var reply NoteReply
 			err = client.Call("NoteService.Add", AddArgs{
-				Text:   text,
+				Text:   args[0],
 				Pinned: pinFlag,
 			}, &reply)
 
