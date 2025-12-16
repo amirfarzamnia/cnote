@@ -172,7 +172,7 @@ func main() {
 		if method == "NoteService.Show" {
 			n := reply.Note
 			fmt.Printf("--- Note %d ---\n", n.ID)
-			fmt.Printf("Pinned:  %v\n", n.Pinned)
+			fmt.Printf("Pinned:  %s\n", map[bool]string{true: "Yes", false: "No"}[n.Pinned])
 			fmt.Printf("Created: %s\n", n.CreatedAt.Format("03:04PM"))
 			fmt.Printf("Content: %s\n", n.Text)
 		} else {
