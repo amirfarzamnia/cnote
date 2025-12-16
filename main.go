@@ -14,7 +14,7 @@ var version = "dev" // GoReleaser will overwrite "dev" with the tag
 func main() {
 	var rootCmd = &cobra.Command{
 		Use:     "cnote",
-		Short:   "cnote: A casual, ephemeral note-taking tool",
+		Short:   "cnote: a casual, ephemeral note-taking tool",
 		Long:    `cnote is an in-memory note tool. Notes persist only while the list is not empty.`,
 		Version: version,
 	}
@@ -32,7 +32,7 @@ func main() {
 	// --- ADD ---
 	var addCmd = &cobra.Command{
 		Use:   "add [note text]",
-		Short: "Add a note (Starts session if empty)",
+		Short: "add a note (starts session if empty)",
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			client, err := getClient(true)
@@ -66,7 +66,7 @@ func main() {
 	var listCmd = &cobra.Command{
 		Use:     "list",
 		Aliases: []string{"ls"},
-		Short:   "List all notes",
+		Short:   "list all notes",
 		Run: func(cmd *cobra.Command, args []string) {
 			client, err := getClient(false) // false = do not start daemon if missing
 			if err != nil {
@@ -107,7 +107,7 @@ func main() {
 	var removeCmd = &cobra.Command{
 		Use:     "remove [id]",
 		Aliases: []string{"rm"},
-		Short:   "Remove a note ('first', 'last', or ID)",
+		Short:   "remove a note ('first', 'last', or ID)",
 		Args:    cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			client, err := getClient(false)
@@ -130,7 +130,7 @@ func main() {
 	// --- CLEAR ---
 	var clearCmd = &cobra.Command{
 		Use:   "clear",
-		Short: "Clear all notes and stop session",
+		Short: "clear all notes and stop session",
 		Run: func(cmd *cobra.Command, args []string) {
 			client, err := getClient(false)
 			if err != nil {
@@ -172,22 +172,22 @@ func main() {
 	}
 
 	var pinCmd = &cobra.Command{
-		Use: "pin [id]", Short: "Pin a note", Args: cobra.ExactArgs(1),
+		Use: "pin [id]", Short: "pin a note", Args: cobra.ExactArgs(1),
 		Run: func(c *cobra.Command, a []string) { runIDCommand("NoteService.Pin", a[0]) },
 	}
 
 	var unpinCmd = &cobra.Command{
-		Use: "unpin [id]", Short: "Unpin a note", Args: cobra.ExactArgs(1),
+		Use: "unpin [id]", Short: "unpin a note", Args: cobra.ExactArgs(1),
 		Run: func(c *cobra.Command, a []string) { runIDCommand("NoteService.Unpin", a[0]) },
 	}
 
 	var showCmd = &cobra.Command{
-		Use: "show [id]", Short: "Show full details", Args: cobra.ExactArgs(1),
+		Use: "show [id]", Short: "show full details", Args: cobra.ExactArgs(1),
 		Run: func(c *cobra.Command, a []string) { runIDCommand("NoteService.Show", a[0]) },
 	}
 
 	// Register flag before Execute
-	addCmd.Flags().BoolP("pin", "p", false, "Pin the note immediately")
+	addCmd.Flags().BoolP("pin", "p", false, "pin the note immediately")
 
 	// Add all commands to rootCmd
 	rootCmd.AddCommand(daemonCmd, addCmd, listCmd, removeCmd, clearCmd, pinCmd, unpinCmd, showCmd)
