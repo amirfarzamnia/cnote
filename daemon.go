@@ -123,7 +123,7 @@ func (s *NoteService) Add(args AddArgs, reply *NoteReply) error {
 	s.nextID++
 
 	reply.Note = n
-	reply.Message = fmt.Sprintf("🎩 Note added (ID: %d)", n.ID)
+	reply.Message = fmt.Sprintf("Note added (ID: %d)", n.ID)
 	return nil
 }
 
@@ -153,7 +153,7 @@ func (s *NoteService) Remove(args IDArgs, reply *NoteReply) error {
 
 	// Delete from slice
 	s.notes = append(s.notes[:idx], s.notes[idx+1:]...)
-	reply.Message = fmt.Sprintf("🗑️ Removed note %d", note.ID)
+	reply.Message = fmt.Sprintf("Removed note %d", note.ID)
 
 	// Crucial: Check if we should kill the process
 	s.checkAutoShutdown()
@@ -166,7 +166,7 @@ func (s *NoteService) Clear(args EmptyArgs, reply *NoteReply) error {
 	defer s.mu.Unlock()
 
 	s.notes = []*Note{}
-	reply.Message = "✨ All notes cleared. Session ended."
+	reply.Message = "All notes cleared. Session ended."
 	s.checkAutoShutdown()
 	return nil
 }
@@ -182,7 +182,7 @@ func (s *NoteService) Pin(args IDArgs, reply *NoteReply) error {
 	}
 	note.Pinned = true
 	reply.Note = note
-	reply.Message = fmt.Sprintf("📌 Pinned note %d", note.ID)
+	reply.Message = fmt.Sprintf("Pinned note %d", note.ID)
 	return nil
 }
 
