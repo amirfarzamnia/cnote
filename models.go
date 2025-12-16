@@ -14,7 +14,8 @@ type Note struct {
 
 // AddArgs represents arguments for adding a note.
 type AddArgs struct {
-	Text string
+	Text   string
+	Pinned bool
 }
 
 // IDArgs represents arguments for commands targeting a specific note.

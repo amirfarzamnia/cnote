@@ -116,14 +116,18 @@ func (s *NoteService) Add(args AddArgs, reply *NoteReply) error {
 	n := &Note{
 		ID:        s.nextID,
 		Text:      args.Text,
-		Pinned:    false,
+		Pinned:    args.Pinned,
 		CreatedAt: time.Now(),
 	}
 	s.notes = append(s.notes, n)
 	s.nextID++
 
 	reply.Note = n
-	reply.Message = fmt.Sprintf("Note added (ID: %d)", n.ID)
+	status := ""
+	if n.Pinned {
+		status = " (Pinned)"
+	}
+	reply.Message = fmt.Sprintf("Note added%s (ID: %d)", status, n.ID)
 	return nil
 }
 

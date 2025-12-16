@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 	"text/tabwriter"
 	"time"
 
@@ -35,24 +36,27 @@ func main() {
 		Short: "Add a note (Starts session if empty)",
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			// Join args so "cnote add my note" works without quotes
-			text := ""
-			for i, arg := range args {
-				if i > 0 {
-					text += " "
-				}
-				text += arg
-			}
+			text := strings.Join(args, " ")
 
-			client, err := getClient(true) // true = auto-start daemon
+			client, err := getClient(true)
 			if err != nil {
 				fmt.Println("Error:", err)
 				return
 			}
 			defer client.Close()
 
+			pinFlag, err := cmd.Flags().GetBool("pin")
+			if err != nil {
+				fmt.Println("Error retrieving pin flag:", err)
+				return
+			}
+
 			var reply NoteReply
-			err = client.Call("NoteService.Add", AddArgs{Text: text}, &reply)
+			err = client.Call("NoteService.Add", AddArgs{
+				Text:   text,
+				Pinned: pinFlag,
+			}, &reply)
+
 			if err != nil {
 				fmt.Println("RPC Error:", err)
 				return
@@ -190,4 +194,6 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+
+	addCmd.Flags().BoolP("pin", "p", false, "Pin the note immediately")
 }
