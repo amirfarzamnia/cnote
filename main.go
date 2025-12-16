@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"sort"
 	"text/tabwriter"
 
 	"github.com/spf13/cobra"
@@ -85,6 +86,11 @@ func main() {
 				fmt.Println("No notes found.")
 				return
 			}
+
+			// Sort notes: pinned ones first
+			sort.Slice(reply.Notes, func(i, j int) bool {
+				return reply.Notes[i].Pinned && !reply.Notes[j].Pinned
+			})
 
 			// Tabwriter for clean columns
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
