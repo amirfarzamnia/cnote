@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"text/tabwriter"
-	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -89,14 +88,14 @@ func main() {
 
 			// Tabwriter for clean columns
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-			fmt.Fprintln(w, "ID\t \tTIME\tNOTE")
-			fmt.Fprintln(w, "--\t-\t----\t----")
+			fmt.Fprintln(w, "ID\tPIN\tTIME\tNOTE")
+			fmt.Fprintln(w, "--\t---\t-------\t----")
 			for _, n := range reply.Notes {
 				pinMarker := ""
 				if n.Pinned {
-					pinMarker = "📌"
+					pinMarker = "Yes"
 				}
-				dateStr := n.CreatedAt.Format(time.Kitchen)
+				dateStr := n.CreatedAt.Format("03:04PM")
 				fmt.Fprintf(w, "%d\t%s\t%s\t%s\n", n.ID, pinMarker, dateStr, n.Text)
 			}
 			w.Flush()
@@ -164,7 +163,7 @@ func main() {
 			n := reply.Note
 			fmt.Printf("--- Note %d ---\n", n.ID)
 			fmt.Printf("Pinned:  %v\n", n.Pinned)
-			fmt.Printf("Created: %s\n", n.CreatedAt.Format(time.Kitchen))
+			fmt.Printf("Created: %s\n", n.CreatedAt.Format("03:04PM"))
 			fmt.Printf("Content: %s\n", n.Text)
 		} else {
 			fmt.Println(reply.Message)
