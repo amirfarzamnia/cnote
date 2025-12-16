@@ -63,8 +63,9 @@ func main() {
 
 	// --- LIST ---
 	var listCmd = &cobra.Command{
-		Use:   "list",
-		Short: "List all notes",
+		Use:     "list",
+		Aliases: []string{"ls"},
+		Short:   "List all notes",
 		Run: func(cmd *cobra.Command, args []string) {
 			client, err := getClient(false) // false = do not start daemon if missing
 			if err != nil {
@@ -103,9 +104,10 @@ func main() {
 
 	// --- REMOVE ---
 	var removeCmd = &cobra.Command{
-		Use:   "remove [id]",
-		Short: "Remove a note ('first', 'last', or ID)",
-		Args:  cobra.ExactArgs(1),
+		Use:     "remove [id]",
+		Aliases: []string{"rm"},
+		Short:   "Remove a note ('first', 'last', or ID)",
+		Args:    cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			client, err := getClient(false)
 			if err != nil {
