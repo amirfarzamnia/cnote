@@ -96,7 +96,7 @@ func main() {
 				if n.Pinned {
 					pinMarker = "📌"
 				}
-				dateStr := n.CreatedAt.Format("15:04")
+				dateStr := n.CreatedAt.Format(time.Kitchen)
 				fmt.Fprintf(w, "%d\t%s\t%s\t%s\n", n.ID, pinMarker, dateStr, n.Text)
 			}
 			w.Flush()
