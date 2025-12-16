@@ -16,26 +16,27 @@ You have two options for installing **cnote**:
 
 The easiest way is to download a binary from our [GitHub Releases page](https://github.com/amirfarzamnia/cnote/releases).
 
-1.  **Download:** Find the latest release and download the file appropriate for your system:
-    - **Linux:** `cnote_[version]_linux_amd64.tar.gz`
-    - **macOS (Intel/M1/M2):** `cnote_[version]_darwin_amd64.tar.gz`
+1. **Download:** Find the latest release and download the file appropriate for your system:
+   - **Linux:** `cnote_[version]_linux_amd64.tar.gz`
+   - **macOS (Intel/M1/M2):** `cnote_[version]_darwin_amd64.tar.gz`
 
-2.  **Extract:** Unpack the archive to get the `cnote` executable.
+2. **Extract:** Unpack the archive to get the `cnote` executable.
 
-    ```bash
-    tar -xzf cnote_[version]_linux_amd64.tar.gz
-    ```
+   ```bash
+   tar -xzf cnote_[version]_linux_amd64.tar.gz
+   ```
 
-3.  **Install:** Move the binary to a directory in your system's PATH (e.g., `/usr/local/bin`).
+3. **Install:** Move the binary to a directory in your system's PATH (e.g., `/usr/local/bin`).
 
-    ```bash
-    sudo mv cnote /usr/local/bin/
-    ```
+   ```bash
+   sudo mv cnote /usr/local/bin/
+   ```
 
-4.  **Verify:** Check the version to ensure it's installed correctly.
-    ```bash
-    cnote --version
-    ```
+4. **Verify:** Check the version to ensure it's installed correctly.
+
+   ```bash
+   cnote --version
+   ```
 
 ### Option 2: Build from Source (Requires Go)
 
@@ -53,7 +54,7 @@ sudo mv cnote /usr/local/bin/
 
 ## 🎩 Usage
 
-**1. Start a session**
+**1. Start a session:**
 Just add a note. If `cnote` isn't running, it starts itself.
 
 ```bash
@@ -61,32 +62,35 @@ cnote add "Deploy to production at 4pm"
 # Note added (ID: 1)
 ```
 
-**2. Add more**
+**2. Add more:**
+Add some more notes.
 
 ```bash
 cnote add "Buy milk"
 cnote add "Check server logs" --pin
 ```
 
-**3. View notes**
+**3. View notes:**
+List added notes.
 
 ```bash
 cnote list
-# ID   	 	TIME	NOTE
-# --   	-	----	----
-# 1    		15:30	Deploy to production at 4pm
-# 2    		15:31	Buy milk
-# 3    		15:32	Check server logs
+# ID      TIME NOTE
+# --    - ---- ----
+# 1      15:30 Deploy to production at 4pm
+# 2      15:31 Buy milk
+# 3      15:32 Check server logs
 ```
 
-**4. Pin important stuff**
+**4. Pin important stuff:**
+See how pinning notes works.
 
 ```bash
 cnote pin 1
 # Pinned note 1
 ```
 
-**5. Smart Removal**
+**5. Smart Removal:**
 You can use IDs, or keywords `first` and `last`.
 
 ```bash
@@ -94,7 +98,7 @@ cnote remove last
 # Removed note 3
 ```
 
-**6. The "Done" Button**
+**6. The "Done" Button:**
 When you clear the list, `cnote` shuts down completely.
 
 ```bash
@@ -106,9 +110,9 @@ cnote clear
 
 `cnote` is built for maximum efficiency using a **Client-Daemon** architecture hidden inside a single binary.
 
-1.  **Lazy Loading:** When you run `cnote add`, the client checks for a Unix Domain Socket (`/tmp/cnote.sock`). If missing, it silently spawns a background process (the daemon).
-2.  **In-Memory:** The daemon holds your notes in a Go slice (RAM). No disk I/O, no JSON files, no SQLite.
-3.  **Aggressive Garbage Collection:** Every time a note is removed, the daemon checks the list size. If `count == 0`, the daemon calls `os.Exit(0)`, instantly returning all resources to the OS.
+1. **Lazy Loading:** When you run `cnote add`, the client checks for a Unix Domain Socket (`/tmp/cnote.sock`). If missing, it silently spawns a background process (the daemon).
+2. **In-Memory:** The daemon holds your notes in a Go slice (RAM). No disk I/O, no JSON files, no SQLite.
+3. **Aggressive Garbage Collection:** Every time a note is removed, the daemon checks the list size. If `count == 0`, the daemon calls `os.Exit(0)`, instantly returning all resources to the OS.
 
 This ensures you never have a stray background service eating RAM when you aren't actually working on something.
 
