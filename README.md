@@ -79,9 +79,9 @@ List added notes.
 cnote list
 # ID  PINNED  CREATED  CONTENT
 # --  ------  -------  -------
-# 3   Yes     11:35PM  Check server logs
-# 1           11:35PM  Deploy to production at 4pm
-# 2           11:35PM  Buy milk
+# 3   Yes     15:30PM  Check server logs
+# 1           15:31PM  Deploy to production at 4pm
+# 2           15:32PM  Buy milk
 ```
 
 **4. Pin important stuff:**
